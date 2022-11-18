@@ -50,10 +50,19 @@ app.delete('/user/:id', async(req, res)=>{
 //crear un registro
 
 app.post('/post', async(req, res)=>{
-    const {title, content} = req.body
+    const {title, content, email} = req.body
+    const user = await prisma.user.findUnique({
+        where: {
+            email : email
+        }
+        
+    })
+   
+    const userId = user.id
+    
     const result = await prisma.post.create({
         data: {
-            title, content
+            title, content, userId 
         }
     })
     res.json(result)
@@ -86,7 +95,10 @@ app.delete('/post/:id', async(req, res)=>{
     })
     res.json('Eliminado')
 })
+//login
+
 
 app.listen(3000, ()=> 
     console.log('servidor listo en : http//localhost:3000')
 )
+

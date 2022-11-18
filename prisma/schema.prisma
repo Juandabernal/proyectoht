@@ -10,15 +10,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 //creacion del modelo
-model Post {
-  id Int @id @default(autoincrement())
-  title String @db.VarChar(255)
-  content String
-}
 
 model  User{
   id Int @id @default(autoincrement())
   name String @db.VarChar(255) @unique
   email String @unique
   password String @unique 
+  post Post [] 
+
+  
+}
+model Post {
+  id Int @id @default(autoincrement())
+  title String @db.VarChar(255)
+  content String
+  userId Int 
+  user User @relation(fields: [userId], references:[id])
+}
+
+model Login {
+  email String  @unique
+  password String
 }
